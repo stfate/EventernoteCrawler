@@ -221,6 +221,8 @@ def get_user_events(user_id, year="", month="", day=""):
     for i in range(1, len(_output_dict)):
         output_dict["events"].extend(_output_dict[i]["events"])
 
+    output_dict["events"] = sorted(output_dict["events"], key=lambda x:x["day"])
+
     os.chdir(cur_dir)
 
     return output_dict

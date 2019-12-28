@@ -23,11 +23,9 @@ if __name__ == "__main__":
     event_dict = json.load(open("./data/user_event_list_2019.json", "r", encoding="utf-8"))
 
     events = event_dict["events"]
-    print(len(events))
+    print("#events=", len(events))
 
     actors_count_dict = count_actors(events)
-    print(actors_count_dict)
-
     sorted_actors_count = sorted(actors_count_dict.items(), key=lambda x:x[1], reverse=True)
     for _actor in sorted_actors_count:
         print(_actor)

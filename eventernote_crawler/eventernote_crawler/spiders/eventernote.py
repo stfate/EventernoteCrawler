@@ -525,7 +525,9 @@ class EventernoteUserEventListSpider(scrapy.Spider):
                     day = _text[:-2]
 
             # holding_time
-            holding_time = div_event.css("div.place span.s::text").extract_first().rstrip()
+            holding_time = div_event.css("div.place span.s::text").extract_first()
+            if type(holding_time) == str:
+                holding_time = holding_time.rstrip()
 
             # actors
             actor_list = []
