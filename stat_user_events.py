@@ -20,15 +20,21 @@ def count_actors(events):
 
 
 if __name__ == "__main__":
-    event_dict = json.load(open("./data/user_event_list_2019.json", "r", encoding="utf-8"))
+    event_dict = json.load(open("./data/user_event_list_2017.json", "r", encoding="utf-8"))
 
     events = event_dict["events"]
-    print("#events=", len(events))
 
     actors_count_dict = count_actors(events)
     sorted_actors_count = sorted(actors_count_dict.items(), key=lambda x:x[1], reverse=True)
-    for _actor in sorted_actors_count:
-        print(_actor)
-
     reina_factor = actors_count_dict["上田麗奈"] / len(events)
-    print("reina_factor=", reina_factor)
+    
+    with open("2017.txt", "w", encoding="utf-8") as fo:
+        fo.write(f"#events={len(events)}\n")
+        fo.write("\n")
+
+        fo.write("top actors=\n")
+        for _actor in sorted_actors_count[:10]:
+            fo.write(f"{_actor[0]}\t{_actor[1]}\n")
+        fo.write("\n")
+
+        fo.write(f"ReinaFactor={reina_factor:.06f}")

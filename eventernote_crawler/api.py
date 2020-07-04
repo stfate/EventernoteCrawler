@@ -21,10 +21,12 @@ def get_actor_events(actor_id):
         "scrapy", "crawl", "eventernote-actor-events",
         "-a", "actor_id={}".format(actor_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -43,10 +45,12 @@ def get_actor_users(actor_id):
         "scrapy", "crawl", "eventernote-actor-users",
         "-a", "actor_id={}".format(actor_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -65,10 +69,12 @@ def get_actor_user_ranking(actor_id):
         "scrapy", "crawl", "eventernote-actor-user-ranking",
         "-a", "actor_id={}".format(actor_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -87,12 +93,14 @@ def get_actors(min_user_cnt=10):
         "scrapy", "crawl", "eventernote-actors",
         "-a", "min_user_cnt={}".format(min_user_cnt),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    actors_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    actors = json.loads(actors_str)
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    actors = json.load(open("tmp.json", "r", encoding="utf-8"))
     sorted_actors = sorted(actors, key=lambda actor:actor["actor_id"])
     output_dict = {"actors": sorted_actors}
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -110,11 +118,13 @@ def get_actors_ranking():
     cmd = [
         "scrapy", "crawl", "eventernote-actors-ranking",
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    actor_ranking = json.loads(output_str)
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    actor_ranking = json.load(open("tmp.json"))
     output_dict = {"actor_ranking": actor_ranking}
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -133,10 +143,12 @@ def get_event_info(event_id):
         "scrapy", "crawl", "eventernote-event-info",
         "-a", "event_id={}".format(event_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -155,10 +167,12 @@ def get_event_participants(event_id):
         "scrapy", "crawl", "eventernote-event-participants",
         "-a", "event_id={}".format(event_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -177,10 +191,12 @@ def get_user_info(user_id):
         "scrapy", "crawl", "eventernote-user-info",
         "-a", "user_id={}".format(user_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -202,26 +218,28 @@ def get_user_events(user_id, year="", month="", day=""):
         "scrapy", "crawl", "eventernote-user-event-pages",
         "-a", f"user_id={user_id}", "-a", f"year={year}", "-a", f"month={month}", "-a", f"day={day}",
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    urls_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    urls_dict = json.loads(urls_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    urls_dict = json.load(open("tmp.json"))[0]
     num_pages = urls_dict["num_pages"]
 
     cmd = [
         "scrapy", "crawl", "eventernote-user-event-list",
         "-a", f"user_id={user_id}", "-a", f"year={year}", "-a", f"month={month}", "-a", f"day={day}", "-a", f"num_pages={num_pages}",
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    _output_dict = json.loads(output_str)
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    _output_dict = json.load(open("tmp.json"))
 
     output_dict = _output_dict[0]
     for i in range(1, len(_output_dict)):
         output_dict["events"].extend(_output_dict[i]["events"])
 
     output_dict["events"] = sorted(output_dict["events"], key=lambda x:x["day"])
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
@@ -240,10 +258,12 @@ def get_venue_info(venue_id):
         "scrapy", "crawl", "eventernote-venue-info",
         "-a", "venue_id={}".format(venue_id),
         "-t", "json",
-        "-o", "-"
+        "-o", "tmp.json"
     ]
-    output_str = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
-    output_dict = json.loads(output_str)[0]
+    subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf-8")
+    output_dict = json.load(open("tmp.json"))[0]
+
+    os.remove("tmp.json")
 
     os.chdir(cur_dir)
 
